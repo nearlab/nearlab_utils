@@ -1,5 +1,5 @@
 #include "orbitPropagator.h"
-#include "orbiatlParams.h"
+#include "orbitalParams.h"
 #include "rungeKutta.h"
 #include <math.h>
 
