@@ -24,7 +24,8 @@ include_directories(
 add_library(nearlab_utils SHARED
                src/orbitPropagator.cpp
                src/quatMath.cpp
-               src/rungeKutta.cpp)
+               src/rungeKutta.cpp
+	       src/attitudePropagator.cpp)
 
 target_link_libraries(nearlab_utils ${catkin_LIBRARIES})
 
