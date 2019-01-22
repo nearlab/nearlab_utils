@@ -25,8 +25,8 @@ void attProp(Eigen::MatrixXd& stateHist, const Eigen::Vector4d& q0, const Eigen:
       Eigen::VectorXd u = control.col(iter);
       Eigen::VectorXd state4 = state;
       Eigen::VectorXd state5 = state;
-      rungeKutta(state4,t,t+dt,dt,u,p,cwDeriv,4);
-      rungeKutta(state5,t,t+dt,dt,u,p,cwDeriv,5);
+      rungeKutta(state4,t,t+dt,dt,u,p,attDeriv,4);
+      rungeKutta(state5,t,t+dt,dt,u,p,attDeriv,5);
       
       //ROS_INFO_STREAM("Time: " << t <<"\titer:"<<iter<< "\tdelta-t: "<< dt <<"\tDifference: " << (state5-state4).norm() <<"\nState4\n"<<state4<<"\nState5\n"<<state5);
       
@@ -57,7 +57,7 @@ void attProp(Eigen::MatrixXd& stateHist, const Eigen::Vector4d& q0, const Eigen:
   stateHist.col(intervals-1) << state;
 }
 
-Eigen::VectorXd cwDeriv(const double& t, const Eigen::VectorXd& y, const Eigen::VectorXd& u, const Params& params){
+Eigen::VectorXd attDeriv(const double& t, const Eigen::VectorXd& y, const Eigen::VectorXd& u, const Params& params){
 
     AttitudeParams p = (AttitudeParams)params;
     Eigen::Vector4d q = y.head(4);

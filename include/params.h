@@ -4,7 +4,8 @@
 #define PARAMS_H
 
 class Params{
-  Params();
+public:
+  virtual ~Params(){}
 };
 
 class OrbitalParams : public Params{

@@ -60,7 +60,7 @@ void cwProp(Eigen::MatrixXd& stateHist, const Eigen::Vector3d& r0, const Eigen::
 
 Eigen::VectorXd cwDeriv(const double& t, const Eigen::VectorXd& y, const Eigen::VectorXd& u, const Params& params){
 
-    OrbitalParams p = (OrbitalParams)params;
+    const OrbitalParams& p = dynamic_cast<const OrbitalParams&>(params);
 
     Eigen::VectorXd yDot = Eigen::VectorXd::Zero(y.size());
     

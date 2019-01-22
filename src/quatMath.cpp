@@ -7,8 +7,8 @@ Eigen::Matrix3d quat2rot(const Eigen::Vector4d& q){
   T -= 2*q(3)*crossProductEquivalent(q.head(3));
   return T;
 }
-Eigen::Vector4d quatRot(const Eigen::VectorXd& q, const Eigen::Vector4d& dq){
-  Eigen::Vector4d qOut = (Eigen::MatrixXd::Identity(4,4)*dq(3)+skew(dq))*q;
+Eigen::Vector4d quatRot(const Eigen::Vector4d& q, const Eigen::Vector4d& dq){
+  Eigen::Vector4d qOut = skew(dq)*q;
   return qOut;
 }
 Eigen::Matrix4d skew(const Eigen::Vector4d& q){
