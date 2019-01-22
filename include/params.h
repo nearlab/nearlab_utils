@@ -5,9 +5,9 @@
 
 class Params{
   Params();
-}
+};
 
-class OrbitalParams{
+class OrbitalParams : public Params{
 public:
   double m;//mass, kg
   double F;//Thrust, kg*m/s^2 (N)
@@ -26,7 +26,7 @@ public:
   }
 };
 
-class AttitudeParams{
+class AttitudeParams : public Params{
 public:
   // This will eventually need to include other things, presumably, for various attitude effects in space
   Eigen::Matrix3d J;//Orbital radius
