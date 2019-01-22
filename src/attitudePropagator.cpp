@@ -1,13 +1,12 @@
-#include "orbitPropagator.h"
+#include "attitudePropagator.h"
 #include "rungeKutta.h"
+#include "quatMath.h"
 #include <math.h>
 
 
 
-void cwProp(Eigen::MatrixXd& stateHist, const Eigen::Vector3d& r0, const Eigen::Vector3d& v0, const Eigen::MatrixXd& control, const double& tf, const int& intervals, const OrbitalParams& p){
+void attProp(Eigen::MatrixXd& stateHist, const Eigen::Vector4d& q0, const Eigen::Vector3d& w0, const Eigen::MatrixXd& control, const double& tf, const int& intervals, const AttitudeParams& p){
   Eigen::VectorXd state = Eigen::VectorXd::Zero(6);
-  state.head(3) = r0.head(3)/p.nu;
-  state.tail(3) = v0.head(3)*p.tau/p.nu;
   double dt = tf/(intervals)/100;
   double dtConst = tf/intervals;
   double t = 0;
@@ -44,7 +43,9 @@ void cwProp(Eigen::MatrixXd& stateHist, const Eigen::Vector3d& r0, const Eigen::
       
       double tStar = (iter)*dtConst;
       if(t>tStar){
+        // TODO: THIS IS NOT OPTIMAL FOR QUATERNIONS
         Eigen::VectorXd stateFixed = ((t-tStar)*state5 + (tStar-(t-dt/sLast))*state)/(dt/sLast);
+        stateFixed.head(4).normalize();
         stateHist.col(iter++) << stateFixed;
       }
       state = state5;
@@ -54,28 +55,18 @@ void cwProp(Eigen::MatrixXd& stateHist, const Eigen::Vector3d& r0, const Eigen::
       dt = std::min(dtConst,s*dt);
   }
   stateHist.col(intervals-1) << state;
-  stateHist *= p.nu;
-  stateHist.block(3,0,3,intervals) /= p.tau;
 }
 
 Eigen::VectorXd cwDeriv(const double& t, const Eigen::VectorXd& y, const Eigen::VectorXd& u, const Params& params){
 
-    OrbitalParams p = (OrbitalParams)params;
+    AttitudeParams p = (AttitudeParams)params;
+    Eigen::Vector4d q = y.head(4);
+    Eigen::Vector3d w = y.tail(3);
 
     Eigen::VectorXd yDot = Eigen::VectorXd::Zero(y.size());
-    
-    Eigen::MatrixXd A = Eigen::MatrixXd::Zero(6,6);
-    A << 0, 0, 0, 1, 0, 0,
-       0, 0, 0, 0, 1, 0,
-       0, 0, 0, 0, 0, 1,
-       3*p.n*p.n, 0, 0, 0, 2*p.n, 0,
-       0, 0, 0, -2*p.n, 0, 0,
-       0, 0, -p.n*p.n, 0, 0, 0;
-    Eigen::MatrixXd B = Eigen::MatrixXd::Zero(6,6);
-    B.block(3,3,3,3) = Eigen::MatrixXd::Identity(3,3)*( p.F*p.tau*p.tau/p.m/p.nu);
 
-    Eigen::VectorXd v = u;
-    v(3) = -v(3);
-    yDot = A*y + B*v;
+    yDot.tail(3) = p.J.inverse()*u;
+    yDot.head(4) = quatDot(q,w);
+
     return yDot;
 }

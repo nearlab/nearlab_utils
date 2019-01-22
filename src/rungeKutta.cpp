@@ -3,8 +3,8 @@
 // Finds value of y for a given t using step size dt
 // and initial value y at t0. 
 // u is the control input over that timestep
-void rungeKutta(Eigen::VectorXd& y, const double& t0, const double& tf, const double& dt, const Eigen::VectorXd& u, const OrbitalParams& p,
-                Eigen::VectorXd (*dydt)(const double&, const Eigen::VectorXd&, const Eigen::VectorXd&, const OrbitalParams&), int order){
+void rungeKutta(Eigen::VectorXd& y, const double& t0, const double& tf, const double& dt, const Eigen::VectorXd& u, const Params& p,
+                Eigen::VectorXd (*dydt)(const double&, const Eigen::VectorXd&, const Eigen::VectorXd&, const Params&), int order){
     // Count number of iterations using step size or 
     // step height h 
     int n = (int)((tf - t0) / dt); 
