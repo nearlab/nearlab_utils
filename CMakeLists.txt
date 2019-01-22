@@ -11,10 +11,6 @@ find_package(catkin REQUIRED COMPONENTS
 #find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 set(EIGEN3_INCLUDE_DIRS /usr/share/eigen)
 
-catkin_package(CATKIN_DEPENDS
-  roscpp
-)
-
 #########
 # BUILD #
 #########
@@ -25,14 +21,24 @@ include_directories(
 )
 
 
-add_library(nearlab_utils
+add_library(nearlab_utils SHARED
                src/orbitPropagator.cpp
                src/quatMath.cpp
                src/rungeKutta.cpp)
 
-set_target_properties(nearlab_utils PROPERTIES PUBLIC_HEADER include/*.h)
+target_link_libraries(nearlab_utils ${catkin_LIBRARIES})
+
+#set_target_properties(nearlab_utils PROPERTIES PUBLIC_HEADER include/*.h)
 
 
-# install(TARGETS mylib
-#     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-#     PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+catkin_package(
+  CATKIN_DEPENDS roscpp
+  INCLUDE_DIRS include
+  LIBRARIES nearlab_utils
+)
+
+install(DIRECTORY include/${PROJECT_NAME}/
+	DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
+
+install( TARGETS nearlab_utils
+         DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}/${PROJECT_NAME} )

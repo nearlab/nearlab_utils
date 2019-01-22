@@ -1,4 +1,6 @@
 #include <Eigen/Dense>
+
+#include "orbitalParams.h"
 //#include <ros/ros.h>
 
 #ifndef ORBIT_PROPAGATOR_H
