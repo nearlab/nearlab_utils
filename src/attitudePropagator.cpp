@@ -59,7 +59,7 @@ void attProp(Eigen::MatrixXd& stateHist, const Eigen::Vector4d& q0, const Eigen:
 
 Eigen::VectorXd attDeriv(const double& t, const Eigen::VectorXd& y, const Eigen::VectorXd& u, const Params& params){
 
-    AttitudeParams p = (AttitudeParams)params;
+    const AttitudeParams& p = dynamic_cast<const AttitudeParams&>(params);
     Eigen::Vector4d q = y.head(4);
     Eigen::Vector3d w = y.tail(3);
 
