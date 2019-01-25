@@ -7,7 +7,7 @@ void rungeKutta(Eigen::VectorXd& y, const double& t0, const double& tf, const do
                 Eigen::VectorXd (*dydt)(const double&, const Eigen::VectorXd&, const Eigen::VectorXd&, const Params&), int order){
     // Count number of iterations using step size or 
     // step height h 
-    int n = (int)((tf - t0) / dt); 
+    int n = (int)(std::round((tf - t0) / dt)); 
     double t = t0;
 
     Eigen::VectorXd k1, k2, k3, k4, k5, k6; 

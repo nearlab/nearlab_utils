@@ -54,7 +54,7 @@ void attProp(Eigen::MatrixXd& stateHist, const Eigen::Vector4d& q0, const Eigen:
       
       dt = std::min(dtConst,s*dt);
   }
-  stateHist.col(intervals-1) << state;
+  stateHist.col(intervals) << state;
 }
 
 Eigen::VectorXd attDeriv(const double& t, const Eigen::VectorXd& y, const Eigen::VectorXd& u, const Params& params){
